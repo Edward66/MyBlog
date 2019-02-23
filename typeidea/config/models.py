@@ -6,8 +6,8 @@ class Link(models.Model):
     STATUS_NORMAL = 1
     STATUS_DELETE = 0
     STATUS_ITEMS = (
-        ('STATUS_NORMAL', '正常'),
-        ('STATUS_DELETE', '删除'),
+        (STATUS_NORMAL, '正常'),
+        (STATUS_DELETE, '删除'),
     )
     title = models.CharField(max_length=50, verbose_name='标题')
     href = models.URLField(verbose_name='链接')  # 默认长度为200
@@ -24,8 +24,8 @@ class SideBar(models.Model):
     STATUS_SHOW = 1
     STATUS_HIDE = 0
     STATUS_ITEMS = (
-        ('STATUS_SHOW', '展示'),
-        ('STATUS_HIDE', '隐藏'),
+        (STATUS_SHOW, '展示'),
+        (STATUS_HIDE, '隐藏'),
     )
     SIDE_TYPE = (
         (1, 'HTML'),
