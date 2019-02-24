@@ -31,15 +31,32 @@ class TagAdmin(admin.ModelAdmin):
         return super(TagAdmin, self).save_model(request, obj, form, change)
 
 
+class CategoryOwnerFilter(admin.SimpleListFilter):
+    """
+    自定义分类只展示当前用户分类（右侧）
+    """
+    title = '分类过滤器'
+    parameter_name = 'owner_category'
+
+    def lookups(self, request, model_admin):
+        return Category.objects.filter(owner=request.user).values_list('id', 'name')
+
+    def queryset(self, request, queryset):  # 这个方法根据URL Query的内容返回列表页数据
+        category_id = self.value()  # self.value()拿的是?owner_category=1里的数字
+        if category_id:
+            return queryset.filter(category_id=self.value())
+        return queryset
+
+
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = [
         'title', 'category', 'status',
-        'created_time', 'operator'
+        'created_time', 'owner', 'operator'
     ]
     list_display_links = []  # 用来配置哪些字段可以作为链接
 
-    list_filter = ['category', ]  # 需要通过哪些字段来过滤列表页
+    list_filter = [CategoryOwnerFilter, ]  # 需要通过哪些字段来过滤列表页
     search_fields = ['title', 'category_name']
 
     actions_on_top = True  # 动作
