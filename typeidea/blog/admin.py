@@ -2,18 +2,23 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
+from django.urls import reverse
+from django.utils.html import format_html
 
 from .models import Post, Category, Tag
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'status', 'is_nav', 'created_time')
+    list_display = ('name', 'status', 'is_nav', 'created_time', 'post_count')
     fields = ('name', 'status', 'is_nav',)
 
     def save_model(self, request, obj, form, change):
         obj.owner = request.user
         return super(CategoryAdmin, self).save_model(request, obj, form, change)
+
+    def post_count(self, obj):  # 分类下有多少篇文章
+        return obj.post_set.count()
 
 
 @admin.register(Tag)
