@@ -7,6 +7,7 @@ from django.utils.html import format_html
 
 from .adminforms import PostAdminForm
 from .models import Post, Category, Tag
+from typeidea.custom_site import custom_site
 
 
 class PostInline(admin.TabularInline):  # StackedInline 样式不同
@@ -15,7 +16,7 @@ class PostInline(admin.TabularInline):  # StackedInline 样式不同
     model = Post
 
 
-@admin.register(Category)
+@admin.register(Category, site=custom_site)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'status', 'is_nav', 'created_time', 'post_count')
     fields = ('name', 'status', 'is_nav',)
@@ -29,7 +30,7 @@ class CategoryAdmin(admin.ModelAdmin):
         return obj.post_set.count()
 
 
-@admin.register(Tag)
+@admin.register(Tag, site=custom_site)
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'status', 'created_time')
     fields = ('name', 'status')
@@ -56,7 +57,7 @@ class CategoryOwnerFilter(admin.SimpleListFilter):
         return queryset
 
 
-@admin.register(Post)
+@admin.register(Post, site=custom_site)
 class PostAdmin(admin.ModelAdmin):
     form = PostAdminForm
     list_display = [
@@ -98,7 +99,7 @@ class PostAdmin(admin.ModelAdmin):
     def operator(self, obj):
         return format_html(
             '<a href="{}">编辑</a>',
-            reverse('admin:blog_post_change', args=(obj.id,))
+            reverse('cus_admin:blog_post_change', args=(obj.id,))
         )
 
     operator.short_description = '操作'  # 指定表头的展示文案
@@ -110,8 +111,3 @@ class PostAdmin(admin.ModelAdmin):
     def get_queryset(self, request):  # 用户只能看到自己的文章
         qs = super(PostAdmin, self).get_queryset(request)
         return qs.filter(owner=request.user)
-
-    class Media:
-        css = {
-            'all': ("https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css",),
-        }
