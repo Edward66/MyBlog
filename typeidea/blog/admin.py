@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.contrib.admin.models import LogEntry
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
@@ -98,3 +99,8 @@ class PostAdmin(BaseOwnerAdmin):
         )
 
     operator.short_description = '操作'  # 指定表头的展示文案
+
+
+@admin.register(LogEntry, site=custom_site)
+class LogEntryAdmin(admin.ModelAdmin):
+    list_display = ['object_repr', 'object_id', 'action_flag', 'user', 'change_message']
