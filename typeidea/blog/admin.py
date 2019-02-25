@@ -65,12 +65,25 @@ class PostAdmin(admin.ModelAdmin):
     # 编辑页面
     save_on_top = True  # 编辑页面按钮
 
-    fields = (
-        ('category', 'title'),
-        'desc',
-        'status',
-        'content',
-        'tag'
+    exclude = ('owner',)
+
+    fieldsets = (
+        ('基础配置', {
+            'description': '基础配置信息',
+            'fields': (
+                ('title', 'category'),
+                'status'
+            ),
+        }),
+        ('内容', {
+            'fields': (
+                'desc', 'content'
+            ),
+        }),
+        ('额外信息', {
+            'classes': ('collapse',),
+            'fields': ('tag',),
+        })
     )
 
     def operator(self, obj):
@@ -88,3 +101,8 @@ class PostAdmin(admin.ModelAdmin):
     def get_queryset(self, request):  # 用户只能看到自己的文章
         qs = super(PostAdmin, self).get_queryset(request)
         return qs.filter(owner=request.user)
+
+    class Media:
+        css = {
+            'all': ("https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css",),
+        }
