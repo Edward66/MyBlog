@@ -7,6 +7,7 @@ from django.utils.html import format_html
 
 from .adminforms import PostAdminForm
 from .models import Post, Category, Tag
+from typeidea.base_admin import BaseOwnerAdmin
 from typeidea.custom_site import custom_site
 
 
@@ -17,27 +18,21 @@ class PostInline(admin.TabularInline):  # StackedInline 样式不同
 
 
 @admin.register(Category, site=custom_site)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(BaseOwnerAdmin):
     list_display = ('name', 'status', 'is_nav', 'created_time', 'post_count')
     fields = ('name', 'status', 'is_nav',)
     inlines = [PostInline, ]
 
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        return super(CategoryAdmin, self).save_model(request, obj, form, change)
-
     def post_count(self, obj):  # 分类下有多少篇文章
         return obj.post_set.count()
 
+    post_count.short_description = '文章数量'
+
 
 @admin.register(Tag, site=custom_site)
-class TagAdmin(admin.ModelAdmin):
+class TagAdmin(BaseOwnerAdmin):
     list_display = ('name', 'status', 'created_time')
     fields = ('name', 'status')
-
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        return super(TagAdmin, self).save_model(request, obj, form, change)
 
 
 class CategoryOwnerFilter(admin.SimpleListFilter):
@@ -58,7 +53,7 @@ class CategoryOwnerFilter(admin.SimpleListFilter):
 
 
 @admin.register(Post, site=custom_site)
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(BaseOwnerAdmin):
     form = PostAdminForm
     list_display = [
         'title', 'category', 'status',
@@ -72,10 +67,10 @@ class PostAdmin(admin.ModelAdmin):
     actions_on_top = True  # 动作
     actions_on_bottom = True
 
+    filter_vertical = ('tag',)
+
     # 编辑页面
     save_on_top = True  # 编辑页面按钮
-
-    exclude = ('owner',)
 
     fieldsets = (
         ('基础配置', {
@@ -103,11 +98,3 @@ class PostAdmin(admin.ModelAdmin):
         )
 
     operator.short_description = '操作'  # 指定表头的展示文案
-
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        return super(PostAdmin, self).save_model(request, obj, form, change)
-
-    def get_queryset(self, request):  # 用户只能看到自己的文章
-        qs = super(PostAdmin, self).get_queryset(request)
-        return qs.filter(owner=request.user)
