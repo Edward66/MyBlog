@@ -40,6 +40,10 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+    @classmethod
+    def get_tag(cls, tag_id):
+        return cls.objects.get(id=tag_id)
+
 
 class Post(models.Model):
     STATUS_NORMAL = 1
@@ -59,9 +63,10 @@ class Post(models.Model):
     owner = models.ForeignKey(User, verbose_name='作者')
     created_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
 
-    class Meta:
-        verbose_name = verbose_name_plural = '文章'
-        ordering = ['-id']  # 根据id进行降序排序
-
     def __str__(self):
         return self.title
+
+    @classmethod
+    def get_post(cls, post_id):
+        return cls.objects.get(id=post_id)
+
