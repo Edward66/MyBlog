@@ -21,6 +21,10 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    @classmethod
+    def get_category(cls, category_id):
+        return cls.objects.filter(id=category_id)
+
 
 class Tag(models.Model):
     STATUS_NORMAL = 1
@@ -69,4 +73,3 @@ class Post(models.Model):
     @classmethod
     def get_post(cls, post_id):
         return cls.objects.get(id=post_id)
-
