@@ -21,6 +21,16 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    @classmethod
+    def get_navs(cls):
+        categories = cls.objects.filter(status=cls.STATUS_NORMAL)
+        nav_categories = categories.filter(is_nav=True)
+        normal_categories = nav_categories.filter(is_nav=False)
+        return {
+            'navs': nav_categories,
+            'categories': normal_categories
+        }
+
 
 class Tag(models.Model):
     STATUS_NORMAL = 1
