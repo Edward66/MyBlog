@@ -10,21 +10,12 @@ def post_list(request, category_id=None, tag_id=None):
     category = None
 
     if tag_id:
-        try:
-            tag = Tag.get_tag(tag_id)
-        except Tag.DoesNotExist:
-            post_list = []
-        else:
-            post_list = tag.post_set.filter(status=Post.STATUS_NORMAL)
+        post_list, tag = Post.get_by_tag(tag_id)
+
     else:
         post_list = Post.objects.filter(status=Post.STATUS_NORMAL)
         if category_id:
-            try:
-                category = Category.get_category(category_id)
-            except Category.DoesNotExist:
-                category = None
-            else:
-                post_list = post_list.filter(category_id=category_id)
+            post_list, category = Post.get_by_category(category_id)
 
     context = {
         'category': category,
@@ -36,7 +27,7 @@ def post_list(request, category_id=None, tag_id=None):
 
 def post_detail(request, post_id):
     try:
-        post = Post.get_post(post_id)
+        post = Post.objects.get(id=post_id)
     except Post.DoesNotExist:
         post = None
     return render(request, 'blog/detail.html', context={'post': post})

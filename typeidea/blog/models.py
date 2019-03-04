@@ -21,10 +21,6 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-    @classmethod
-    def get_category(cls, category_id):
-        return cls.objects.filter(id=category_id)
-
 
 class Tag(models.Model):
     STATUS_NORMAL = 1
@@ -43,10 +39,6 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
-
-    @classmethod
-    def get_tag(cls, tag_id):
-        return cls.objects.get(id=tag_id)
 
 
 class Post(models.Model):
@@ -70,6 +62,28 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    @staticmethod
+    def get_by_tag(tag_id):
+        try:
+            tag = Tag.objects.get(id=tag_id)
+        except Tag.DoesNotExist:
+            tag = None
+            post_list = []
+        else:
+            post_list = tag.post_set.filter(status=Post.STATUS_NORMAL).select_related('owner', 'category')
+        return post_list, tag
+
+    @staticmethod
+    def get_by_category(category_id):
+        try:
+            category = Category.objects.get(id=category_id)
+        except Category.DoesNotExist:
+            category = None
+            post_list = []
+        else:
+            post_list = category.post_set.filter(status=Post.STATUS_NORMAL).select_related('owner', 'category')
+        return post_list, category
+
     @classmethod
-    def get_post(cls, post_id):
-        return cls.objects.get(id=post_id)
+    def latest_post(cls):
+        queryset = cls.objects.filter(status=cls.STATUS_NORMAL)
