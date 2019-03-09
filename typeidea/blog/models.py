@@ -102,8 +102,9 @@ class Post(models.Model):
         return post_list, category
 
     @classmethod
-    def latest_post(cls):
+    def latest_posts(cls):
         queryset = cls.objects.filter(status=cls.STATUS_NORMAL)
+        return queryset
 
     @classmethod
     def hot_posts(cls):

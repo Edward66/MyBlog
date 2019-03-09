@@ -10,18 +10,32 @@
         分类页：{{ category.name }}
     {% endif %}
 
-{% endblock %}
+{% endblock title %}
 
 {% block main %}
-    {% for post in post_list %}
-        <li>
-            <a href="{% url 'post-detail' post.id %}">{{ post.title }}</a>
-        </li>
-        <div>
-            <span>作者：{{ post.owner.username }}</span>
-            <span>分类：{{ post.category.name }}</span>
-        </div>
-        <p>{{ post.desc }}</p>
-    {% endfor %}
-{% endblock %}
+    <ul>
+        {% for post in post_list %}
+            <li>
+                <a href="{% url 'post-detail' post.id %}">{{ post.title }}</a>
+            </li>
+            <div>
+                <span>作者：{{ post.owner.username }}</span>
+                <span>分类：{{ post.category.name }}</span>
+            </div>
+            <p>{{ post.desc }}</p>
+        {% endfor %}
 
+
+        {% if page_obj %}
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">上一页</a>
+            {% endif %}
+            Page {{ page_obj.number }} of {{ paginator.num_pages }}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">下一页</a>
+            {% endif %}
+
+        {% endif %}
+    </ul>
+{% endblock main %}
