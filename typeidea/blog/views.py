@@ -49,10 +49,8 @@ class IndexView(CommonViewMixin, ListView):
 class CategoryView(IndexView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print('2', context)
         category_id = self.kwargs.get('category_id')
         category = get_object_or_404(Category, pk=category_id)
-        print(category)
         context.update({
             'category': category,
         })
@@ -80,7 +78,7 @@ class TagView(IndexView):
         """重写queryset，根据标签过滤"""
         queryset = super().get_queryset()
         tag_id = self.kwargs.get('tag_id')
-        return queryset.filter(tag_id=tag_id)
+        return queryset.filter(tag__id=tag_id)
 
 
 class PostDetailView(CommonViewMixin, DetailView):

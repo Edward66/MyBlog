@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Typeidea blog - by the5fire</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <style>
+        .post {
+            margin-bottom: 5px; /* 配置每个post卡片下面的间隔*/
+        }
+    </style>
+</head>
+<body>
+<div class="container head">
+    <nav class="navbar  fixed-top navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">首页</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                {% for cate in navs %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'category-list' cate.id %}">{{ cate.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">搜索</button>
+            </form>
+        </div>
+    </nav>
+    <div class="jumbotron">
+        <h1 class="display-4">the1fire</h1>
+        <p class="lead">基于Django的多人博客系统</p>
+    </div>
+</div>
+
+<div class="container main">
+    <div class="row">
+        <div class="col-xl-9 post-list">
+            {% block main %}
+            {% endblock main %}
+        </div>
+        <div class="col-xl-3">
+            {% for sidebar in sidebars %}
+                <div class="card sidebar">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ sidebar.title }}</h4>
+                        <p>
+                            {{ sidebar.content }}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+
+    {% block footer %}
+        <div class="container">
+            <hr/>
+
+            {% for cate in navs %}
+                <nav class="nav category">
+                    <a href="{% url 'category-list' cate.id %}" class="nav-link">{{ cate.name }}</a>
+                </nav>
+            {% endfor %}
+        </div>
+        <div class="container power">
+            <span class="text-muted">Power by the1fire</span>
+        </div>
+    {% endblock %}
+
+</footer>
+</body>
+</html>
