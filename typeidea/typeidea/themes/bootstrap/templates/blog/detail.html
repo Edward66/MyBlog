@@ -1,11 +1,45 @@
-{% if post %}
-    <h1>{{ post.title }}</h1>
-    <div>
-        <span>分类：{{ post.category.name }}</span>
-        <span>作者：{{ post.owner.name }}</span>
-    </div>
+{% extends 'blog/base.html' %}
+
+{% block title %} {{ post.title }} {% endblock %}
+
+{% block main %}
+    {% if post %}
+        <h1>{{ post.title }}</h1>
+        <div>
+            <span>分类：{{ post.category.name }}</span>
+            <span>作者：{{ post.owner.name }}</span>
+        </div>
+        <hr/>
+        <p>
+            {{ post.content }}
+        </p>
+    {% endif %}
+
     <hr/>
-    <p>
-        {{ post.content }}
-    </p>
-{% endif %}
+    <div class="comment">
+        <form class="form-group" action="/comment/" method="POST" novalidate>
+            {% csrf_token %}
+            <input type="hidden" name="target" value="{{ request.path }}"/>
+            {{ comment_form }}
+            <input class="btn btn-success" type="submit" value="写好了！"/>
+        </form>
+
+        <!-- 评论列表 -->
+        <ul class="list-group">
+            {% for comment in comment_list %}
+                <li class="list-group-item">
+                    <div class="nickname">
+                        <a href="{{ comment.website }}">{{ comment.nickname }}</a>
+                        <span>{{ comment.created_time }}</span>
+                    </div>
+                    <div class="comment-content">
+                        {{ comment.content }}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+
+
+{% endblock main %}

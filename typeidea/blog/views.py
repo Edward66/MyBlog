@@ -4,11 +4,12 @@ from __future__ import unicode_literals
 from django.db.models import Q
 from django.views.generic import DetailView
 from django.views.generic import ListView
-from django.shortcuts import render
 from django.shortcuts import get_object_or_404  # 获取一个对象的实例，获取到就返回对象实例，获取不到就抛出404错误
 
 from .models import Post, Tag, Category
 from config.models import SideBar
+from comment.models import Comment
+from comment.forms import CommentForm
 
 
 class CommonViewMixin:
@@ -88,6 +89,14 @@ class PostDetailView(CommonViewMixin, DetailView):
     context_object_name = 'post'
     pk_url_kwarg = 'post_id'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'comment_form': CommentForm,
+            'comment_list': Comment.get_by_target(self.request.path),
+        })
+        return context
+
 
 class SearchView(IndexView):
     def get_context_data(self):
@@ -110,3 +119,6 @@ class AuthorView(IndexView):
         queryset = super().get_queryset()
         author_id = self.kwargs.get('owner_id')
         return queryset.filter(owner_id=author_id)
+
+
+

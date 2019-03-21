@@ -5,6 +5,7 @@ from blog.views import (
     IndexView, CategoryView, TagView,
     PostDetailView, SearchView, AuthorView
 )
+from comment.views import CommentView
 from config.views import LinkListView
 from .custom_site import custom_site
 
@@ -18,4 +19,5 @@ urlpatterns = [
     url(r'^admin/', custom_site.urls, name='admin'),
     url(r'^search/$', SearchView.as_view(), name='search'),
     url(r'^author/(?P<owner_id>\d+)/$', AuthorView.as_view(), name='author'),
+    url(r'^comment/$', CommentView.as_view(), name='comment'),
 ]
