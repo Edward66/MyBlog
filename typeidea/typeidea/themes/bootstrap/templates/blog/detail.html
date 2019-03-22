@@ -1,4 +1,5 @@
 {% extends 'blog/base.html' %}
+{% load comment_block %}
 
 {% block title %} {{ post.title }} {% endblock %}
 
@@ -15,30 +16,9 @@
         </p>
     {% endif %}
 
-    <hr/>
-    <div class="comment">
-        <form class="form-group" action="/comment/" method="POST" novalidate>
-            {% csrf_token %}
-            <input type="hidden" name="target" value="{{ request.path }}"/>
-            {{ comment_form }}
-            <input class="btn btn-success" type="submit" value="写好了！"/>
-        </form>
+    {% comment_block request.path %}
 
-        <!-- 评论列表 -->
-        <ul class="list-group">
-            {% for comment in comment_list %}
-                <li class="list-group-item">
-                    <div class="nickname">
-                        <a href="{{ comment.website }}">{{ comment.nickname }}</a>
-                        <span>{{ comment.created_time }}</span>
-                    </div>
-                    <div class="comment-content">
-                        {{ comment.content }}
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+
 
 
 
