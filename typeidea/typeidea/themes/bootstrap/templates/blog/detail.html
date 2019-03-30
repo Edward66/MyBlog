@@ -12,7 +12,7 @@
         </div>
         <hr/>
         <p>
-            {{ post.content }}
+            {{ post.content_html|safe }}
         </p>
     {% endif %}
 

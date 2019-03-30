@@ -1,6 +1,11 @@
 {% load static %}
 <!DOCTYPE HTML>
 <html lang="en">
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'plugins/highlightjs/styles/solarized-dark.css' %}">
+    <script src="{% static 'plugins/highlightjs/highlight.pack.js' %}"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+{% endblock %}
 <head>
     <title>Typeidea blog - by the5fire</title>
     <meta charset="utf-8">
