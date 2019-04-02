@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db.models import Q
+from datetime import date
+
+from django.core.cache import cache
+from django.db.models import F, Q
 from django.views.generic import DetailView
 from django.views.generic import ListView
 from django.shortcuts import get_object_or_404  # 获取一个对象的实例，获取到就返回对象实例，获取不到就抛出404错误
@@ -17,6 +20,9 @@ class CommonViewMixin:
         context = super().get_context_data(**kwargs)  # 根据MRO，会去ListView里找
         context.update({
             'sidebars': self.get_sidebars(),
+            'hot_posts': Post.hot_posts()[0:5],
+            'latest_posts': Post.latest_posts()[0:5],
+            'latest_comment': Comment.latest_comment()[0:5],
         })
         context.update(self.get_navs())
         return context
@@ -88,6 +94,33 @@ class PostDetailView(CommonViewMixin, DetailView):
     template_name = 'blog/detail.html'
     context_object_name = 'post'
     pk_url_kwarg = 'post_id'
+
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+        self.handle_visited()
+        return response
+
+    def handle_visited(self):
+        increase_pv = False
+        increase_uv = False
+        uid = self.request.uid
+        pv_key = f'pv:{uid}:{self.request.path}'
+        uv_key = f'uv:{uid}:{str(date.today())}:{self.request.path}'
+        if not cache.get(pv_key):
+            increase_pv = True
+            cache.set(pv_key, 1, 1 * 60)  # 1分钟有效
+        if not cache.get(uv_key):
+            increase_uv = True
+            cache.set(uv_key, 1, 24 * 60 * 60)  # 24小时有效
+
+        if increase_pv and increase_uv:
+            Post.objects.filter(pk=self.object.id).update(pv=F('pv') + 1, uv=F('uv') + 1)
+
+
+        elif increase_pv:
+            Post.objects.filter(pk=self.object.id).update(pv=F('pv') + 1)
+        elif increase_uv:
+            Post.objects.filter(pk=self.object.id).update(uv=F('uv') + 1)
 
 
 class SearchView(IndexView):

@@ -24,3 +24,7 @@ class Comment(models.Model):
     @classmethod
     def get_by_target(cls, target):
         return cls.objects.filter(target=target, status=cls.STATUS_NORMAL)
+
+    @classmethod
+    def latest_comment(cls):
+        return cls.objects.filter(status=cls.STATUS_NORMAL).order_by('-id')
