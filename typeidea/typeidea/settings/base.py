@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     'blog',
     'config',
     'comment',
+    'xadmin',
+    'crispy_forms',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -124,3 +126,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'themes', THEME, 'static'),
 ]
+
+# xadmin配置
+
+XADMIN_TITLE = 'the1fire后台管理'
+XADMIN_FOOTER_TITLE = 'power by the1fire.com'
