@@ -2,6 +2,7 @@ import mistune
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils.functional import cached_property
 
 
 class Category(models.Model):
@@ -116,3 +117,8 @@ class Post(models.Model):
     def save(self, *args, **kwargs):
         self.content_html = mistune.markdown(self.content)
         super(Post, self).save(*args, **kwargs)
+
+    @cached_property  # 把返回的数据绑到实例上
+    def tags(self):
+        # 返回值的类型是列表，如果不声明flat=True，列表是由元组组成
+        return ','.join(self.tag.values_list('name', flat=True))

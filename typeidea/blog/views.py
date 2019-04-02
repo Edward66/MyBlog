@@ -20,9 +20,9 @@ class CommonViewMixin:
         context = super().get_context_data(**kwargs)  # 根据MRO，会去ListView里找
         context.update({
             'sidebars': self.get_sidebars(),
-            'hot_posts': Post.hot_posts()[0:5],
-            'latest_posts': Post.latest_posts()[0:5],
-            'latest_comment': Comment.latest_comment()[0:5],
+            'hot_posts': Post.hot_posts()[:5],
+            'latest_posts': Post.latest_posts()[:5],
+            'latest_comment': Comment.latest_comment()[:5],
         })
         context.update(self.get_navs())
         return context
