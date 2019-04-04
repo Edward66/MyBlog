@@ -1,6 +1,8 @@
 import xadmin
 
-from django.conf.urls import url
+from django.conf import settings
+from django.conf.urls import url, include
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sitemaps import views as sitemap_views
 
@@ -30,4 +32,5 @@ urlpatterns = [
     url(r'^sitemap\.xml$', sitemap_views.sitemap, {'sitemaps': {'posts': PostSitemap}}),
     url(r'^category-autocomplete/$', CateogryAutocomplete.as_view(), name='category-autocomplete'),
     url(r'^tag-autocomplete/$', TagAutocomplete.as_view(), name='tag-autocomplete'),
-]
+    url(r'ckeditor/',include('ckeditor_uploader.urls')),
+] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
