@@ -12,7 +12,8 @@ from blog.views import (
 )
 from comment.views import CommentView
 from config.views import LinkListView
-from .custom_site import custom_site
+
+from .autocomplete import CateogryAutocomplete, TagAutocomplete
 
 urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
@@ -27,4 +28,6 @@ urlpatterns = [
     url(r'^comment/$', CommentView.as_view(), name='comment'),
     url(r'^rss|fade/', LatestPostFeed(), name='rss'),
     url(r'^sitemap\.xml$', sitemap_views.sitemap, {'sitemaps': {'posts': PostSitemap}}),
+    url(r'^category-autocomplete/$', CateogryAutocomplete.as_view(), name='category-autocomplete'),
+    url(r'^tag-autocomplete/$', TagAutocomplete.as_view(), name='tag-autocomplete'),
 ]
