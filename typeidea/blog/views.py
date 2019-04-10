@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from datetime import date
 
+
 from django.core.cache import cache
 from django.db.models import F, Q
 from django.views.generic import DetailView
@@ -48,7 +49,7 @@ class CommonViewMixin:
 
 
 class IndexView(CommonViewMixin, ListView):
-    queryset = Post.latest_posts()
+    queryset = Post.latest_posts().prefetch_related('tag')
     paginate_by = 5
     context_object_name = 'post_list'  # 如果不设置此项，在模板中需要使用object_list变量
     template_name = 'blog/list.html'

@@ -107,8 +107,10 @@ class Post(models.Model):
         return post_list, category
 
     @classmethod
-    def latest_posts(cls):
+    def latest_posts(cls, with_related=True):
         queryset = cls.objects.filter(status=cls.STATUS_NORMAL).order_by('-id')
+        if with_related:
+            queryset = queryset.select_related('owner', 'category')  # 一次性查询出owner和category
         return queryset
 
     @classmethod
