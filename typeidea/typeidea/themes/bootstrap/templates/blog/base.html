@@ -1,4 +1,5 @@
 {% load static %}
+{% load cache %}
 <!DOCTYPE HTML>
 <html lang="en">
 {% block extra_head %}
@@ -49,33 +50,35 @@
             {% endblock main %}
         </div>
         <div class="col-xl-3">
-            {% for sidebar in sidebars %}
+            {% cache 50 sidebars %}
+                {% for sidebar in sidebars %}
 
-                {% if not forloop.first %}
-                    <div class="card sidebar" style="margin-top:10px">
-                {% else %}
-                    <div class="card sidebar">
-                {% endif %}
-            <div class="card-body">
-                <h4 class="card-title">{{ sidebar.title }}</h4>
-                {% if sidebar.display_type == sidebar.DISPLAY_HTML %}
-                    大家好，我是python程序员
-                {% elif sidebar.display_type == sidebar.DISPLAY_HOT %}
-                    <ul>
-                        {% for post in hot_posts %}
-                            <li><a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a></li>
-                        {% endfor %}
-                    </ul>
-                {% elif sidebar.display_type == sidebar.DISPLAY_LATEST %}
-                    <ul>
-                        {% for post in latest_posts %}
-                            <li><a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a></li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </div>
-            </div>
-            {% endfor %}
+                    {% if not forloop.first %}
+                        <div class="card sidebar" style="margin-top:10px">
+                    {% else %}
+                        <div class="card sidebar">
+                    {% endif %}
+                <div class="card-body">
+                    <h4 class="card-title">{{ sidebar.title }}</h4>
+                    {% if sidebar.display_type == sidebar.DISPLAY_HTML %}
+                        大家好，我是python程序员
+                    {% elif sidebar.display_type == sidebar.DISPLAY_HOT %}
+                        <ul>
+                            {% for post in hot_posts %}
+                                <li><a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% elif sidebar.display_type == sidebar.DISPLAY_LATEST %}
+                        <ul>
+                            {% for post in latest_posts %}
+                                <li><a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                </div>
+                {% endfor %}
+            {% endcache %}
             </div>
         </div>
     </div>
