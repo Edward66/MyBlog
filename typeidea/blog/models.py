@@ -1,6 +1,7 @@
 import mistune
 
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.db import models
 from django.utils.functional import cached_property
 
@@ -115,6 +116,9 @@ class Post(models.Model):
 
     @classmethod
     def hot_posts(cls):
+        result = cache.get('hot_posts')
+        if not result:
+            result = cls.objects.filter(status=cls.STATUS_NORMAL).order_by
         return cls.objects.filter(status=cls.STATUS_NORMAL).order_by('-pv').only('id', 'title')
 
     def save(self, *args, **kwargs):
