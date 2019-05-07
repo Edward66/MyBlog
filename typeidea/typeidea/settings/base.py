@@ -24,7 +24,7 @@ SECRET_KEY = '^1ht@v1=hbh@sn9t&dxrp*zbi=b)a5=qd37pa!5o+$=k7ox%rl'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'blog',
     'config',
     'comment',
+
     'xadmin',
     'crispy_forms',
     'dal',

@@ -1,4 +1,4 @@
-{% load static %}
+{% load staticfiles %}
 {% load cache %}
 <!DOCTYPE HTML>
 <html lang="en">
@@ -8,7 +8,7 @@
     <script>hljs.initHighlightingOnLoad();</script>
 {% endblock %}
 <head>
-    <title>Typeidea blog - by the5fire</title>
+    <title>梁少华的个人博客 - by Edward</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
@@ -21,7 +21,7 @@
 <body>
 <div class="container head">
     <nav class="navbar  fixed-top navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">首页</a>
+        <a class="navbar-brand" href="{% url 'index' %}">首页</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 {% for cate in navs %}
@@ -37,12 +37,10 @@
             </form>
         </div>
     </nav>
-
     <div class="jumbotron">
         <h1 class="display-4">the1fire</h1>
-        <p class="lead">基于Django的多人博客系统</p>
+        <p class="lead">基于Django的个人博客系统</p>
     </div>
-
 </div>
 
 <div class="container main">
@@ -63,7 +61,7 @@
                 <div class="card-body">
                     <h4 class="card-title">{{ sidebar.title }}</h4>
                     {% if sidebar.display_type == sidebar.DISPLAY_HTML %}
-                        大家好，我是python程序员
+                        {{ sidebar.content }}
                     {% elif sidebar.display_type == sidebar.DISPLAY_HOT %}
                         <ul>
                             {% for post in hot_posts %}

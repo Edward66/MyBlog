@@ -5,6 +5,8 @@ import xadmin
 from django.conf import settings
 from django.conf.urls import url, include
 from django.conf.urls.static import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.views import static as view_static
 from django.contrib import admin
 from django.contrib.sitemaps import views as sitemap_views
 from django.views.decorators.cache import cache_page
@@ -19,7 +21,7 @@ from blog.views import (
 from comment.views import CommentView
 from config.views import LinkListView
 
-from .autocomplete import CateogryAutocomplete, TagAutocomplete
+from .autocomplete import CategoryAutocomplete, TagAutocomplete
 
 router = DefaultRouter()
 router.register(r'post', PostViewSet, base_name='api-post')
@@ -41,12 +43,16 @@ urlpatterns = [
                   url(r'^rss|fade/', LatestPostFeed(), name='rss'),
                   url(r'^sitemap\.xml$', cache_page(60 * 20, key_prefix='sitemap_cache_')(sitemap_views.sitemap),
                       {'sitemaps': {'posts': PostSitemap}}),
-                  url(r'^category-autocomplete/$', CateogryAutocomplete.as_view(), name='category-autocomplete'),
+                  url(r'^category-autocomplete/$', CategoryAutocomplete.as_view(), name='category-autocomplete'),
                   url(r'^tag-autocomplete/$', TagAutocomplete.as_view(), name='tag-autocomplete'),
                   url(r'ckeditor/', include('ckeditor_uploader.urls')),
                   url(r'^api/', include(router.urls)),
                   url(r'^api/docs/', include_docs_urls(title='the1fire apis')),
+                  url(r'^static/(?P<path>.*)$', view_static.serve,
+                      {'document_root': settings.STATIC_ROOT}, name='static'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += staticfiles_urlpatterns()
 
 if settings.DEBUG:
     import debug_toolbar

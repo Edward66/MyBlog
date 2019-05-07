@@ -5,11 +5,11 @@ from setuptools import setup, find_packages
 
 setup(
     name='the1fire',
-    version='${version}',
+    version='0.3',
     description='Blog System base on Django',
     author='the1fire',
     author_email='332638046@qq.com',
-    url='https://www.the1fire.com',
+    url='http://www.the1fire.com',
     license='MIT',
     packages=find_packages('typeidea'),
     package_dir={'': 'typeidea'},
@@ -18,14 +18,13 @@ setup(
     # ]},
     include_package_data=True,  # 方法二 配合 MANIFEST.in文件
     install_requires=[
-        'django~=1.11',
+        'django~=2.0',
         'gunicorn==19.8.1',
-        'supervisor==4.0.0dev0',
-        'xadmin==0.6.1',
+        'supervisor==4.0.2',
         'mysqlclient==1.3.12',
         'django-ckeditor==5.4.0',
         'django-rest-framework==0.1.0',
-        'django-redis==4.8.0',
+        'django-redis==4.9.0',
         'django-autocomplete-light==3.2.10',
         'mistune==0.8.3',
         'Pillow==4.3.0',
