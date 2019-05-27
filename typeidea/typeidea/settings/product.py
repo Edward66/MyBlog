@@ -7,7 +7,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'the1fire_db',
         'USER': 'root',
-        'PASSWORD': 'Lshhxr_0310',
+        'PASSWORD': '112233',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {'charset': 'utf8mb4'},
