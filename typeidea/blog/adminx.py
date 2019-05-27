@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import xadmin
+from xadmin import views
 from xadmin.filters import RelatedFieldListFilter
 from xadmin.filters import manager
 from xadmin.layout import Row, Fieldset, Container
@@ -13,13 +14,21 @@ from .models import Post, Category, Tag
 from typeidea.base_admin import BaseOwnerAdmin
 
 
+class BaseSettings:
+    enable_themes = True
+    use_bootswatch = True
+
+
+
+
+
 class PostInline:  # StackedInline 样式不同
     form_layout = (
         Container(
             Row('title', 'desc')
         )
     )
-    extra = 1  # 控制额外多几个
+    extra = 0  # 控制额外多几个
     model = Post
 
 
@@ -104,3 +113,6 @@ class PostAdmin(BaseOwnerAdmin):
         )
 
     operator.short_description = '操作'  # 指定表头的展示文案
+
+
+xadmin.site.register(views.BaseAdminView, BaseSettings)

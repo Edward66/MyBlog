@@ -3,12 +3,11 @@ from __future__ import unicode_literals
 
 from datetime import date
 
-
 from django.core.cache import cache
 from django.db.models import F, Q
 from django.views.generic import DetailView
 from django.views.generic import ListView
-from django.shortcuts import get_object_or_404  # 获取一个对象的实例，获取到就返回对象实例，获取不到就抛出404错误
+from django.shortcuts import get_object_or_404, render_to_response  # 获取一个对象的实例，获取到就返回对象实例，获取不到就抛出404错误
 
 from .models import Post, Tag, Category
 from config.models import SideBar
@@ -145,3 +144,17 @@ class AuthorView(IndexView):
         queryset = super().get_queryset()
         author_id = self.kwargs.get('owner_id')
         return queryset.filter(owner_id=author_id)
+
+
+def page_not_found(request):
+    # 全局404处理函数
+    response = render_to_response('404.html')
+    response.status_code = 404
+    return response
+
+
+def page_error(request):
+    # 全局500处理函数
+    response = render_to_response('500.html')
+    response.status_code = 500
+    return response

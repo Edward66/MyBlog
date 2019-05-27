@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='the1fire',
-    version='0.3',
+    version='0.5',
     description='Blog System base on Django',
     author='the1fire',
     author_email='332638046@qq.com',

@@ -2,18 +2,19 @@ from .base import *  # NOQA
 
 DEBUG = False
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'the1fire_db',
         'USER': 'root',
-        'PASSWORD': '112233',
+        'PASSWORD': 'Lshhxr_0310',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {'charset': 'utf8mb4'},
     }
 }
+
+
 
 STATIC_ROOT = '/home/the1fire/venvs/typeidea-env/static_files/'
 

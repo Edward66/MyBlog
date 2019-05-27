@@ -1,0 +1,11 @@
+{% extends 'blog/base.html' %}
+{% block title %}
+    404
+{% endblock title %}
+
+{% block main %}
+    <p>wow~这个页面被外星人抢走了~</p>
+    <br/>
+    <span>Wow~ this page was the alien took ~</span>
+    <p><a href="{% url 'index' %}">返回首页</a></p>
+{% endblock main %}

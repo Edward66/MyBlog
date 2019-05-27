@@ -10,6 +10,7 @@ from django.views import static as view_static
 from django.contrib import admin
 from django.contrib.sitemaps import views as sitemap_views
 from django.views.decorators.cache import cache_page
+from django.views.static import serve
 
 from blog.apis import PostViewSet, CategoryViewSet, TagViewSet, UserViewSet
 from blog.rss import LatestPostFeed
@@ -53,6 +54,10 @@ urlpatterns = [
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()
+
+# 配置404和500页面
+handle404 = 'blog.views.page_not_found'
+handle500 = 'blog.views.page_error'
 
 if settings.DEBUG:
     import debug_toolbar

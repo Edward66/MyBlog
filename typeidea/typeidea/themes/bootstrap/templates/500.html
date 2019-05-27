@@ -1,0 +1,9 @@
+{% extends 'blog/base.html' %}
+{% block title %}
+    404
+{% endblock title %}
+
+{% block main %}
+    <p>服务器错误，请稍后重新刷新。</p>
+    <p><a href="{% url 'index' %}">返回首页</a></p>
+{% endblock main %}
